@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">ToDoList</string>
+    <string name="task_name">Name</string>
+    <string name="save">Save</string>
+    <string name="task_description">Task Description</string>
+    <string name="textdescriptionview">TextDescriptionView</string>
+    <string name="textnameview">TextNameView</string>
+    <string name="change_layout">change_layout</string>
+</resources>
