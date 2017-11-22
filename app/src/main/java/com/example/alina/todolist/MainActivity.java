@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.alina.todolist.adapters.TaskAdapter;
-import com.example.alina.todolist.adapters.TaskAdapterStyles;
 import com.example.alina.todolist.data.IDataSource;
 import com.example.alina.todolist.data.SharedPreferencesDataSource;
 import com.example.alina.todolist.decorators.DividerItemDecoration;
