@@ -2,10 +2,8 @@ package com.example.alina.todolist;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -17,10 +15,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.dgreenhalgh.android.simpleitemdecoration.grid.GridDividerItemDecoration;
 import com.example.alina.todolist.adapters.TaskAdapter;
+import com.example.alina.todolist.adapters.TaskAdapterStyles;
 import com.example.alina.todolist.data.IDataSource;
 import com.example.alina.todolist.data.SharedPreferencesDataSource;
+import com.example.alina.todolist.decorators.DividerItemDecoration;
 import com.example.alina.todolist.entities.Task;
 import com.example.alina.todolist.enums.ActivityRequest;
 import com.example.alina.todolist.enums.BundleKey;
@@ -63,9 +62,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initTaskRecycler() {
+        int margin = (int) getResources().getDimension(R.dimen.min_margin);
         GridLayoutManager gridLayoutManager = getGridLayoutManager();
         setLayoutManager(gridLayoutManager);
-        taskRecyclerView.addItemDecoration(new DividerItemDecoration(this));
+        taskRecyclerView.addItemDecoration(new DividerItemDecoration(this, margin));
     }
 
     private void setLayoutManager(RecyclerView.LayoutManager layoutManager) {

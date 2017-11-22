@@ -3,7 +3,7 @@
     <string name="task_name">Name</string>
     <string name="save">Save</string>
     <string name="task_description">Task Description</string>
-    <string name="textdescriptionview">TextDescriptionView</string>
-    <string name="textnameview">TextNameView</string>
+    <string name="text_description_view">TextDescriptionView</string>
+    <string name="text_name_view">TextNameView</string>
     <string name="change_layout">change_layout</string>
 </resources>

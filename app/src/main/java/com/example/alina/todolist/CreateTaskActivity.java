@@ -1,7 +1,6 @@
 package com.example.alina.todolist;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
@@ -16,9 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.example.alina.todolist.entities.Task;
 import com.example.alina.todolist.enums.BundleKey;
+import com.example.alina.todolist.fragments.DatePickerFragment;
 import com.example.alina.todolist.validators.Validator;
 
-import java.util.Calendar;
 import java.util.Date;
 
 public class CreateTaskActivity extends AppCompatActivity implements DatePickerFragment.OnDateSelectedListener {

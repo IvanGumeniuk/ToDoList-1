@@ -24,6 +24,7 @@ public abstract class TaskObject implements Parcelable{
         dest.writeString(this.description);
         dest.writeInt(this.status == null ? -1 : this.status.ordinal());
     }
+
     protected TaskObject (Parcel in) {
         this.description = in.readString();
         int tmpStatus = in.readInt();

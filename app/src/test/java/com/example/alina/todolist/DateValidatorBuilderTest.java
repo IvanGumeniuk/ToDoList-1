@@ -5,6 +5,8 @@ import com.example.alina.todolist.validators.Validator;
 import org.junit.Test;
 
 import java.util.Calendar;
+import java.util.Date;
+
 import static org.junit.Assert.*;
 
 /**
@@ -14,48 +16,48 @@ public class DateValidatorBuilderTest {
     @Test
     public void testMinDateValidRule() {
         Calendar calendarMin = Calendar.getInstance();
-        Validator<Calendar> validator = new Validator.DateValidatorBuilder()
-                .setMin(calendarMin)
+        Validator<Date> validator = new Validator.DateValidatorBuilder()
+                .setMin(calendarMin.getTime())
                 .build();
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, 12);
-        boolean result = validator.validate(calendar);
+        boolean result = validator.validate(calendar.getTime());
         assertTrue(result);
     }
 
     @Test
     public void testMinDateInValidRule() {
         Calendar calendarMin = Calendar.getInstance();
-        Validator<Calendar> validator = new Validator.DateValidatorBuilder()
-                .setMin(calendarMin)
+        Validator<Date> validator = new Validator.DateValidatorBuilder()
+                .setMin(calendarMin.getTime())
                 .build();
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, -1);
-        boolean result = validator.validate(calendar);
+        boolean result = validator.validate(calendar.getTime());
         assertFalse(result);
     }
 
     @Test
     public void testMaxDateValidRule() {
         Calendar calendarMax = Calendar.getInstance();
-        Validator<Calendar> validator = new Validator.DateValidatorBuilder()
-                .setMax(calendarMax)
+        Validator<Date> validator = new Validator.DateValidatorBuilder()
+                .setMax(calendarMax.getTime())
                 .build();
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, -12);
-        boolean result = validator.validate(calendar);
+        boolean result = validator.validate(calendar.getTime());
         assertTrue(result);
     }
 
     @Test
     public void testMaxDateInValidRule() {
         Calendar calendarMax = Calendar.getInstance();
-        Validator<Calendar> validator = new Validator.DateValidatorBuilder()
-                .setMax(calendarMax)
+        Validator<Date> validator = new Validator.DateValidatorBuilder()
+                .setMax(calendarMax.getTime())
                 .build();
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, 1);
-        boolean result = validator.validate(calendar);
+        boolean result = validator.validate(calendar.getTime());
         assertFalse(result);
     }
 
@@ -66,10 +68,10 @@ public class DateValidatorBuilderTest {
         Calendar calendar = Calendar.getInstance();
         calendarMax.add(Calendar.YEAR, 20);
         calendarMin.add(Calendar.YEAR, -20);
-        Validator<Calendar> validator = new Validator.DateValidatorBuilder()
-                .setToRange(calendarMin, calendarMax)
+        Validator<Date> validator = new Validator.DateValidatorBuilder()
+                .setToRange(calendarMin.getTime(), calendarMax.getTime())
                 .build();
-        boolean result = validator.validate(calendar);
+        boolean result = validator.validate(calendar.getTime());
         assertTrue(result);
     }
 
@@ -80,10 +82,10 @@ public class DateValidatorBuilderTest {
         Calendar calendar = Calendar.getInstance();
         calendarMax.add(Calendar.YEAR, -18);
         calendarMin.add(Calendar.YEAR, -20);
-        Validator<Calendar> validator = new Validator.DateValidatorBuilder()
-                .setToRange(calendarMin, calendarMax)
+        Validator<Date> validator = new Validator.DateValidatorBuilder()
+                .setToRange(calendarMin.getTime(), calendarMax.getTime())
                 .build();
-        boolean result = validator.validate(calendar);
+        boolean result = validator.validate(calendar.getTime());
         assertFalse(result);
     }
 
@@ -94,10 +96,10 @@ public class DateValidatorBuilderTest {
         Calendar calendar = Calendar.getInstance();
         calendarMax.add(Calendar.YEAR, -18);
         calendarMin.add(Calendar.YEAR, -20);
-        Validator<Calendar> validator = new Validator.DateValidatorBuilder()
-                .setToRange(calendarMax, calendarMin)
+        Validator<Date> validator = new Validator.DateValidatorBuilder()
+                .setToRange(calendarMax.getTime(), calendarMin.getTime())
                 .build();
-        boolean result = validator.validate(calendar);
+        boolean result = validator.validate(calendar.getTime());
         assertFalse(result);
     }
 

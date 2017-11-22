@@ -2,7 +2,8 @@ package com.example.alina.todolist.validators;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -223,11 +224,11 @@ public class Validator<T> {
 
     public static class DateValidatorBuilder {
 
-        Validator<Calendar> validator;
-        private CriteriaRule<Calendar, Calendar> notLessThenMinDate;
-        private CriteriaRule<Calendar, Calendar> notMoreThanMaxDate;
+        Validator<Date> validator;
+        private CriteriaRule<Date, Date> notLessThenMinDate;
+        private CriteriaRule<Date, Date> notMoreThanMaxDate;
 
-        private CriteriaRule<Calendar, Calendar> getNotMoreThanMaxDate(Calendar date,
+        private CriteriaRule<Date, Date> getNotMoreThanMaxDate(Date date,
                                                                        String...messages) {
             String dateString = date.toString();
             String message = getMessageString(messages,
@@ -235,9 +236,9 @@ public class Validator<T> {
             if (notMoreThanMaxDate  != null) {
                 notMoreThanMaxDate.message = message;
             } else {
-                notMoreThanMaxDate = new CriteriaRule<Calendar, Calendar>(message, date) {
+                notMoreThanMaxDate = new CriteriaRule<Date, Date>(message, date) {
                     @Override
-                    public boolean validate(Calendar date) {
+                    public boolean validate(Date date) {
                         return (date.before(this.criteria));
                     }
                 };
@@ -245,7 +246,7 @@ public class Validator<T> {
             return notMoreThanMaxDate;
         }
 
-        private CriteriaRule<Calendar, Calendar> getNotLessThanMinDate(Calendar date,
+        private CriteriaRule<Date, Date> getNotLessThanMinDate(Date date,
                                                                        String...messages) {
             final String dateString = date.toString();
             String message = getMessageString(messages,
@@ -253,9 +254,9 @@ public class Validator<T> {
             if (notLessThenMinDate != null) {
                 notLessThenMinDate.message = message;
             } else {
-                notLessThenMinDate = new CriteriaRule<Calendar, Calendar>(message, date) {
+                notLessThenMinDate = new CriteriaRule<Date, Date>(message, date) {
                     @Override
-                    public boolean validate(Calendar date) {
+                    public boolean validate(Date date) {
                         return date.after(this.criteria);
                     }
                 };
@@ -277,12 +278,12 @@ public class Validator<T> {
             validator = new Validator<>();
         }
 
-        public DateValidatorBuilder setMin(Calendar minDate, String...message) {
+        public DateValidatorBuilder setMin(Date minDate, String...message) {
             validator.rules.add(getNotLessThanMinDate(minDate, message));
             return this;
         }
 
-        public DateValidatorBuilder setToRange(Calendar minDate, Calendar maxDate,
+        public DateValidatorBuilder setToRange(Date minDate, Date maxDate,
                                                String...messages) {
             if (minDate.compareTo(maxDate) < 0) {
                 setMin(minDate, messages);
@@ -294,12 +295,12 @@ public class Validator<T> {
             return this;
         }
 
-        public DateValidatorBuilder setMax(Calendar maxDate, String...message) {
+        public DateValidatorBuilder setMax(Date maxDate, String...message) {
             validator.rules.add(getNotMoreThanMaxDate(maxDate, message));
             return this;
         }
 
-        public Validator<Calendar> build() {
+        public Validator<Date> build() {
             return validator;
         }
     }
