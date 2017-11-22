@@ -70,7 +70,14 @@ public class MainActivity extends AppCompatActivity {
     private void setLayoutManager(RecyclerView.LayoutManager layoutManager) {
         taskRecyclerView = (RecyclerView) findViewById(R.id.taskRecyclerView);
         taskRecyclerView.setLayoutManager(layoutManager);
-        taskAdapter = new TaskAdapter(dataSource.getTaskList());
+        taskAdapter = new TaskAdapter(dataSource.getTaskList(), new TaskAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Task task) {
+                Intent intent = new Intent(MainActivity.this, CreateTaskActivity.class);
+                intent.putExtra(BundleKey.TASK.name(), task);
+                startActivityForResult(intent, ActivityRequest.UPDATE_TASK.ordinal());
+            }
+        });
         taskRecyclerView.setAdapter(taskAdapter);
     }
 
@@ -114,6 +121,15 @@ public class MainActivity extends AppCompatActivity {
                     if (task != null) {
                         dataSource.createTask(task);
                         taskAdapter.add(task);
+                    }
+                }
+                break;
+            case UPDATE_TASK:
+                if(resultCode == Activity.RESULT_OK) {
+                    Task task = data.getParcelableExtra(BundleKey.TASK.name());
+                    if (task != null) {
+                        dataSource.updateTask(task, taskAdapter.getData().indexOf(task));
+                        taskAdapter.update(task);
                     }
                 }
                 break;
