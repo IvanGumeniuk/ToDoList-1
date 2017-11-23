@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:weightSum="1.0"
+    android:baselineAligned="false"
+    android:layout_height="wrap_content">
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_weight="0.9"
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content">
         <TextView
             android:id="@+id/nameTextViewFinished"
-            style="@style/ItemTextViewLarge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/text_name_view"
@@ -17,29 +21,36 @@
             android:textColor="@color/ExpiredTaskColor"/>
         <TextView
             android:id="@+id/descriptionTextViewFinished"
-            style="@style/ItemTextViewSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/ExpiredTaskColorBackground"
             android:text="@string/text_description_view"
+            android:background="@color/ExpiredTaskColorBackground"
             android:textAppearance="@android:style/TextAppearance.Material.Medium"
             android:textColor="@color/colorDescriptionBlack"/>
     </LinearLayout>
+
     <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        android:id="@+id/subTaskCountContainerFinished">
+        android:id="@+id/subTaskCountLayout"
+        android:layout_marginStart="@dimen/space16"
+        android:layout_marginEnd="@dimen/space16"
+        android:layout_weight="0.1"
+        android:visibility="gone"
+        android:layout_width="0dp"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content">
         <ImageView
-            android:background="@drawable/circle"
-            android:layout_gravity="center_horizontal"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_shape"
             android:adjustViewBounds="true"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content" />
         <TextView
-            android:id="@+id/subTaskCountFinished"
+            android:id="@+id/subTaskCount"
+            tools:text="100"
+            android:textAppearance="@android:style/TextAppearance.Material.Medium"
+            android:gravity="center"
             android:layout_gravity="center"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </FrameLayout>
 </LinearLayout>
