@@ -53,6 +53,7 @@ public class SharedPreferencesDataSource implements IDataSource {
     @Override
     public boolean updateTask(@NonNull Task task, @IntRange(from = 0, to = Integer.MAX_VALUE)
             int index) {
+        tasks = getTaskList();
         boolean result = false;
         if (index >= 0 && index < tasks.size()) {
             tasks.set(index, task);
@@ -65,6 +66,10 @@ public class SharedPreferencesDataSource implements IDataSource {
     private boolean setList(String key, ArrayList<Task> list) {
         String json = gson.toJson(list);
         return set(key, json);
+    }
+
+    public static ArrayList<Task> getTasks() {
+        return tasks;
     }
 
     private boolean set(String key, String value) {
