@@ -2,10 +2,10 @@ package com.example.alina.todolist.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.alina.todolist.R;
@@ -90,11 +90,15 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         TextView name;
         TextView description;
+        TextView subTaskCount;
+        FrameLayout subTaskCountLayout;
 
         TaskViewHolderRunning(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.nameTextView);
             description = (TextView) itemView.findViewById(R.id.descriptionTextView);
+            subTaskCount = (TextView) itemView.findViewById(R.id.subTaskCount);
+            subTaskCountLayout = (FrameLayout) itemView.findViewById(R.id.subTaskCountLayout);
         }
 
         void bind(final Task task, final OnItemClickListener onItemClickListener) {
@@ -106,6 +110,10 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     onItemClickListener.onItemClick(task);
                 }
             });
+            if (task.getSubTasks().size() > 0){
+                subTaskCountLayout.setVisibility(View.VISIBLE);
+                subTaskCount.setText(String.valueOf(task.getSubTasks().size()));
+            }
         }
     }
 
@@ -113,11 +121,15 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         TextView name;
         TextView description;
+        TextView subTaskCount;
+        FrameLayout subTaskCountLayout;
 
         TaskViewHolderFinished(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.nameTextViewFinished);
             description = (TextView) itemView.findViewById(R.id.descriptionTextViewFinished);
+            subTaskCount = (TextView) itemView.findViewById(R.id.subTaskCount);
+            subTaskCountLayout = (FrameLayout) itemView.findViewById(R.id.subTaskCountLayout);
         }
 
         void bind(final Task task, final OnItemClickListener onItemClickListener) {
@@ -129,6 +141,10 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     onItemClickListener.onItemClick(task);
                 }
             });
+            if (task.getSubTasks().size() > 0){
+                subTaskCountLayout.setVisibility(View.VISIBLE);
+                subTaskCount.setText(String.valueOf(task.getSubTasks().size()));
+            }
         }
     }
 }
