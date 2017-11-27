@@ -28,6 +28,7 @@ import com.example.alina.todolist.entities.SubTask;
 import com.example.alina.todolist.entities.Task;
 import com.example.alina.todolist.entities.TaskObject;
 import com.example.alina.todolist.enums.BundleKey;
+import com.example.alina.todolist.enums.TaskState;
 import com.example.alina.todolist.fragments.DatePickerFragment;
 import com.example.alina.todolist.fragments.AddSubTaskDialogFragment;
 import com.example.alina.todolist.validators.Validator;
@@ -166,12 +167,12 @@ public class CreateTaskActivity extends AppCompatActivity implements
     }
 
     private void setTaskDone() {
-        if (task.getStatus() == TaskObject.TaskStatus.DONE) {
-            task.setStatus(TaskObject.TaskStatus.NEW);
+        if (task.getStatus() == TaskState.DONE) {
+            task.setStatus(TaskState.ALL);
             saveTask();
         }
-        if (task.isAllSubTasksDone() && task.getStatus() == TaskObject.TaskStatus.NEW) {
-            task.setStatus(TaskObject.TaskStatus.DONE);
+        if (task.isAllSubTasksDone() && task.getStatus() == TaskState.ALL) {
+            task.setStatus(TaskState.DONE);
             saveTask();
         } else {
             Toast.makeText(this, "All SubTasks must be done!", Toast.LENGTH_SHORT).show();

@@ -3,6 +3,8 @@ package com.example.alina.todolist.entities;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.alina.todolist.enums.TaskState;
+
 import java.util.UUID;
 
 /**
@@ -11,17 +13,14 @@ import java.util.UUID;
 
 public abstract class TaskObject implements Parcelable {
 
-    public enum TaskStatus {
-        NEW,
-        DONE
-    }
+
 
     private String uuid;
     private String description;
-    private TaskStatus status;
+    private TaskState status;
 
     public TaskObject() {
-        status = TaskStatus.NEW;
+        status = TaskState.ALL;
         uuid = UUID.randomUUID().toString();
     }
 
@@ -39,11 +38,11 @@ public abstract class TaskObject implements Parcelable {
         this.uuid = in.readString();
         this.description = in.readString();
         int tmpStatus = in.readInt();
-        this.status = tmpStatus == -1 ? null : TaskStatus.values()[tmpStatus];
+        this.status = tmpStatus == -1 ? null : TaskState.values()[tmpStatus];
     }
 
     public boolean isDone() {
-        return status == TaskStatus.DONE;
+        return status == TaskState.DONE;
     }
 
     public String getDescription() {
@@ -54,11 +53,11 @@ public abstract class TaskObject implements Parcelable {
         this.description = description;
     }
 
-    public TaskStatus getStatus() {
+    public TaskState getStatus() {
         return status;
     }
 
-    public void setStatus(TaskStatus status) {
+    public void setStatus(TaskState status) {
         this.status = status;
     }
 

@@ -25,6 +25,7 @@ public class Task extends TaskObject {
     private List<SubTask> subTasksList;
 
     public Task() {
+        super();
         expireDate = new Date();
         subTasksList = new ArrayList<>();
     }
@@ -129,7 +130,7 @@ public class Task extends TaskObject {
         return "Task{" +
                 "name='" + name + '\'' +
                 ", expireDate=" + expireDate +
-                ", subTasksList=" + subTasksList + " " + getStatus().toString() + " " +
-                '}';
+                ", subTasksList=" + subTasksList +
+                '}' + "super=" + super.toString();
     }
 }

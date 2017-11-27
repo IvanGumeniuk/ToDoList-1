@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.alina.todolist.R;
 import com.example.alina.todolist.entities.SubTask;
 import com.example.alina.todolist.entities.TaskObject;
+import com.example.alina.todolist.enums.TaskState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +76,7 @@ public class SubTaskAdapter extends RecyclerView.Adapter<SubTaskAdapter.SubTaskH
             subTaskStatusSwitcher.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    subTask.setStatus(isChecked ? TaskObject.TaskStatus.DONE : TaskObject.TaskStatus.NEW);
+                    subTask.setStatus(isChecked ? TaskState.DONE : TaskState.ALL);
                 }
             });
         }
