@@ -2,27 +2,26 @@ package com.example.alina.todolist;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.view.menu.ActionMenuItemView;
-import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.alina.todolist.adapters.ItemTouchHelperCallback;
 import com.example.alina.todolist.adapters.SubTaskAdapter;
 import com.example.alina.todolist.entities.SubTask;
 import com.example.alina.todolist.entities.Task;
@@ -36,7 +35,9 @@ import com.example.alina.todolist.validators.Validator;
 import java.util.Date;
 
 public class CreateTaskActivity extends AppCompatActivity implements
-        DatePickerFragment.OnDateSelectedListener, AddSubTaskDialogFragment.CreateSubTaskDialogListener{
+        DatePickerFragment.OnDateSelectedListener,
+        AddSubTaskDialogFragment.CreateSubTaskDialogListener,
+        SubTaskAdapter.ItemSwipeCallback{
 
     private Task task;
     private TextInputLayout nameWrapper;
@@ -47,7 +48,6 @@ public class CreateTaskActivity extends AppCompatActivity implements
     private RecyclerView subTaskRecycler;
     private SubTaskAdapter subTaskAdapter;
     private LinearLayout taskDateLayout;
-    private Menu menu;
     private Validator stringValidator = new Validator.StringValidatorBuilder()
             .setNotEmpty()
             .setMinLength(3)
@@ -114,13 +114,17 @@ public class CreateTaskActivity extends AppCompatActivity implements
     }
 
     private void initSubTaskRecycler(){
-        subTaskAdapter = new SubTaskAdapter();
+        subTaskAdapter = new SubTaskAdapter(this);
         subTaskRecycler.setLayoutManager(new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false));
         subTaskRecycler.setAdapter(subTaskAdapter);
         if (task.getSubTasks().size() != 0){
             subTaskAdapter.addAllSubTask(task.getSubTasks());
         }
+
+        ItemTouchHelper.Callback callback = new ItemTouchHelperCallback(subTaskAdapter);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+        itemTouchHelper.attachToRecyclerView(subTaskRecycler);
     }
 
     private void initCreateTaskButton() {
@@ -138,17 +142,8 @@ public class CreateTaskActivity extends AppCompatActivity implements
     public boolean onCreateOptionsMenu (Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.task_editor, menu);
-        MenuItem doneItem = menu.findItem(R.id.item_done_task);
-        MenuItem saveItem = menu.findItem(R.id.item_save);
-        if (task.isDone()) {
-            doneItem.setTitle(getString(R.string.undone_task));
-            saveItem.setEnabled(false);
-        }
-        if (!task.isDone()) {
-            doneItem.setTitle(getString(R.string.done_task));
-            saveItem.setEnabled(true);
-        }
-        this.menu = menu;
+        menu.findItem(R.id.item_done_task).setTitle(task.isDone() ?
+                R.string.undone_task : R.string.done_task);
         return true;
     }
 
@@ -170,8 +165,7 @@ public class CreateTaskActivity extends AppCompatActivity implements
         if (task.getStatus() == TaskState.DONE) {
             task.setStatus(TaskState.ALL);
             saveTask();
-        }
-        if (task.isAllSubTasksDone() && task.getStatus() == TaskState.ALL) {
+        } else if (task.isAllSubTasksDone() && task.getStatus() == TaskState.ALL) {
             task.setStatus(TaskState.DONE);
             saveTask();
         } else {
@@ -185,9 +179,22 @@ public class CreateTaskActivity extends AppCompatActivity implements
             task.setSubTasks(subTaskAdapter.getSubTaskList());
             Intent result = new Intent();
             result.putExtra(BundleKey.TASK.name(), task);
+            result.putExtra(BundleKey.TASK_STATUS.name(), getRootTaskStatus());
             setResult(Activity.RESULT_OK, result);
             finish();
         }
+    }
+
+    private String getRootTaskStatus(){
+        String status;
+        if (task.isAllSubTasksDone() || task.isDone()){
+            status = TaskState.DONE.name();
+        }
+        else if (task.isExpire())
+            status = TaskState.EXPIRED.name();
+        else status = TaskState.ALL.name();
+
+        return status;
     }
 
     private boolean validate(TextInputLayout wrapper) {
@@ -211,5 +218,20 @@ public class CreateTaskActivity extends AppCompatActivity implements
         dateTextView = (TextView) findViewById(R.id.dateTextView);
         task.setExpireDate(date);
         dateTextView.setText(task.getExpireDateString());
+    }
+
+    @Override
+    public void onItemRemoved() {
+        showUndoSnackBar();
+    }
+
+    private void showUndoSnackBar(){
+        Snackbar.make(findViewById(R.id.activity_create_task), R.string.sub_task_deleted, Snackbar.LENGTH_LONG)
+                .setAction(R.string.undo, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        subTaskAdapter.restoreRemovedItem();
+                    }
+                }).show();
     }
 }

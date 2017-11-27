@@ -1,5 +1,7 @@
 package com.example.alina.todolist.adapters;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
@@ -14,18 +16,26 @@ import com.example.alina.todolist.entities.TaskObject;
 import com.example.alina.todolist.enums.TaskState;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by Leonid on 23.11.2017.
  */
 
-public class SubTaskAdapter extends RecyclerView.Adapter<SubTaskAdapter.SubTaskHolder> {
-
+public class SubTaskAdapter extends RecyclerView.Adapter<SubTaskAdapter.SubTaskHolder> implements ISwipeItemAdapter{
     private List<SubTask> subTaskList;
+    private SubTask lastDeletedTask;
+    private int lastDeleteTaskPosition;
+    private ItemSwipeCallback swipeCallback;
 
-    public SubTaskAdapter(){
+    public interface ItemSwipeCallback{
+        void onItemRemoved();
+    }
+
+    public SubTaskAdapter(Context context){
         subTaskList = new ArrayList<>();
+        swipeCallback = (ItemSwipeCallback) context;
     }
 
     public void addNewSubTask(SubTask subTask){
@@ -59,8 +69,30 @@ public class SubTaskAdapter extends RecyclerView.Adapter<SubTaskAdapter.SubTaskH
         return subTaskList;
     }
 
-    class SubTaskHolder extends RecyclerView.ViewHolder {
+    @Override
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        Collections.swap(subTaskList, fromPosition, toPosition);
+        notifyItemMoved(fromPosition, toPosition);
+        return true;
+    }
 
+    @Override
+    public void onItemDismiss(int position) {
+        lastDeletedTask = subTaskList.remove(position);
+        lastDeleteTaskPosition = position;
+        notifyItemRemoved(position);
+        swipeCallback.onItemRemoved();
+    }
+
+    public void restoreRemovedItem(){
+        if (lastDeletedTask != null){
+            subTaskList.add(lastDeleteTaskPosition, lastDeletedTask);
+            notifyItemInserted(lastDeleteTaskPosition);
+            lastDeletedTask = null;
+        }
+    }
+
+    class SubTaskHolder extends RecyclerView.ViewHolder implements ISwipeItemHolder{
         private TextView subTaskDescription;
         private SwitchCompat subTaskStatusSwitcher;
 
@@ -79,6 +111,16 @@ public class SubTaskAdapter extends RecyclerView.Adapter<SubTaskAdapter.SubTaskH
                     subTask.setStatus(isChecked ? TaskState.DONE : TaskState.ALL);
                 }
             });
+        }
+
+        @Override
+        public void onItemSelected() {
+            itemView.setBackgroundColor(Color.LTGRAY);
+        }
+
+        @Override
+        public void onItemClear() {
+            itemView.setBackgroundColor(0);
         }
     }
 }

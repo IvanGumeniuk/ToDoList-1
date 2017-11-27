@@ -15,6 +15,6 @@
     <string name="done_tasks">DONE TASKS</string>
     <string name="expired_task">EXPIRED TASKS</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="undo">UNDO</string>
+    <string name="sub_task_deleted">SubTask deleted</string>
 </resources>
