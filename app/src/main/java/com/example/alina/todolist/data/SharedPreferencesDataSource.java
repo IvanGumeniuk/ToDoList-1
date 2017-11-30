@@ -7,34 +7,30 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.example.alina.todolist.entities.Task;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Alina on 14.11.2017.
  */
 
-public class SharedPreferencesDataSource implements IDataSource {
+public class SharedPreferencesDataSource extends JsonParser implements IDataSource {
 
     private static final String PREF_NAME = "SharedPrefDataSource";
     private static final String KEY_TASK = "KEY_TASK";
 
     private SharedPreferences preferences;
-    private GsonBuilder gsonBuilder;
     private Type taskListType;
     private ArrayList<Task> taskList;
 
     public SharedPreferencesDataSource(Context context){
         if (context != null) {
             preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-            gsonBuilder = new GsonBuilder();
             taskListType = new TypeToken<ArrayList<Task>>(){}.getType();
             if (!isTaskListEmpty()){
-                taskList = convertJsonToList(preferences.getString(KEY_TASK, ""));
+                taskList = convertJsonToListData(preferences.getString(KEY_TASK, ""), taskListType);
             } else {
                 taskList = new ArrayList<>();
             }
@@ -50,7 +46,7 @@ public class SharedPreferencesDataSource implements IDataSource {
     public boolean createTask(@NonNull Task task) {
         boolean result;
         result = taskList.add(task);
-        preferences.edit().putString(KEY_TASK, convertTaskListToJson(taskList)).apply();
+        preferences.edit().putString(KEY_TASK, convertDataListToJson(taskList, taskListType)).apply();
         return result;
     }
 
@@ -61,7 +57,7 @@ public class SharedPreferencesDataSource implements IDataSource {
 
         if (index >= 0 && index < taskList.size()) {
             taskList.set(index, task);
-            preferences.edit().putString(KEY_TASK, convertTaskListToJson(taskList)).apply();
+            preferences.edit().putString(KEY_TASK, convertDataListToJson(taskList, taskListType)).apply();
             result = true;
         }
         return result;
@@ -75,14 +71,6 @@ public class SharedPreferencesDataSource implements IDataSource {
                 position = taskList.indexOf(x);
         }
         return updateTask(task, position);
-    }
-
-    private String convertTaskListToJson(List<Task> task){
-        return gsonBuilder.create().toJson(task, taskListType);
-    }
-
-    private ArrayList<Task> convertJsonToList(String json){
-        return gsonBuilder.create().fromJson(json, taskListType);
     }
 
     private boolean isTaskListEmpty(){
