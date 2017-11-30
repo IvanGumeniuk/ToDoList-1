@@ -20,7 +20,10 @@ import java.util.List;
 public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public interface OnItemClickListener {
+
         void onItemClick(Task task);
+
+        void onItemLongClick(Task task);
     }
 
     private List<Task> tasks;
@@ -110,6 +113,13 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     onItemClickListener.onItemClick(task);
                 }
             });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    onItemClickListener.onItemLongClick(task);
+                    return true;
+                }
+            });
             if (task.getSubTasks().size() > 0){
                 subTaskCountLayout.setVisibility(View.VISIBLE);
                 subTaskCount.setText(String.valueOf(task.getSubTasks().size()));
@@ -139,6 +149,13 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 @Override
                 public void onClick(View v) {
                     onItemClickListener.onItemClick(task);
+                }
+            });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    onItemClickListener.onItemLongClick(task);
+                    return true;
                 }
             });
             if (task.getSubTasks().size() > 0){
